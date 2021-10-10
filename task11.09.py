@@ -1,54 +1,52 @@
 import string
-import random
+from random import choice
 
-list_=[]
 
-def rs (n):
-    a = ''
-    for i in range(n):
-        a += random.choice(string.ascii_letters)
-    return a
+def rand_str(length):
+    letters = list(string.ascii_letters)
+    s = ''
+    for _ in range(length):
+        s += choice(letters)
+    return s
 
-def char_count(n):
-    length_ = len(n)
-    count_up = 0
-    count_down = 0
-    for i in range(length_):
-        if n[i] in string.ascii_lowercase:
-            count_up += 1
+
+def score_letters(str):
+    upper_count = 0
+    lower_count = 0
+    for i in str:
+        if i.isupper():
+            upper_count += 1
         else:
-            count_down += 1
-    if count_up == count_down:
-        return -1
-    elif count_up > count_down:
+            lower_count += 1
+    if upper_count > lower_count:
         return 1
+    elif upper_count == lower_count:
+        return 2
     else:
         return 0
 
-def massivv(n,k):
-    o = []
-    for i in range(k):
-        u = rs(n)
-        o.append(u)
-    return o
 
-def procent(mas, n):
-    count_mass = len(massivv(n,k))
-    k1 = 0
-    for i in range(count_mass):
-        if char_count(massivv(n, k)[i]) == 1:
-            k1 += 1
-    return (k1/count_mass*100)
+def array_of_strings(length, count_strings):
+    return [rand_str(length) for _ in range(count_strings)]
 
 
-print('Введите количество символов в строке')
-n = int(input())
-print('Введите количество строк')
-k = int(input())
-
-massiv_strings = (massivv(n,k))
-print(massiv_strings)
-print('Искомый результат = ', procent(massiv_strings, n), '%', sep='')
+def ratio(array):
+    big_letters = 0
+    small_letters = 0
+    equal = 0
+    for x in array:
+        if score_letters(x) == 1:
+            big_letters += 1
+        elif score_letters(x) == 0:
+            small_letters += 1
+        else:
+            equal += 1
+    ratio_big = (big_letters / len(array)) * 100
+    ratio_small = (small_letters / len(array)) * 100
+    ratio_equal = (equal / len(array)) * 100
+    s = f'В этой строке {round(ratio_big)}% строк где заглавных букв больше {round(ratio_small)}% \
+строк где маленьких букв больше {round(ratio_equal)}% строк где и маленьких и больших букв поровну'
+    return s
 
 
 
